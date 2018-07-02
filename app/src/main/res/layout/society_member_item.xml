@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:clickable="true"
+    android:background="@drawable/ripple_recycleview"
+    android:layout_marginBottom="1dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/member_item_img"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center_vertical"
+        android:src="@mipmap/ic_launcher_round"
+        android:layout_marginLeft="15dp"
+        app:civ_border_width="1dp"
+        app:civ_border_color="@color/colorGray"/>
+
+    <TextView
+        android:id="@+id/member_item_name"
+        android:layout_width="270dp"
+        android:layout_marginLeft="20dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:gravity="center_vertical|left"
+        android:text="社区成员"
+        android:textSize="15sp"/>
+
+</LinearLayout>

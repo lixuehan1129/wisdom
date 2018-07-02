@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/mine_require_mainTool"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorBlue"
+        app:titleTextColor="@color/colorWhite"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:paddingRight="15dp">
+        <Button
+            android:id="@+id/mine_require_ok"
+            android:layout_width="40dp"
+            android:layout_height="25dp"
+            android:layout_gravity="end"
+            android:background="@drawable/button_ok"
+            android:text="提交"
+            android:textColor="@color/colorWhite"
+            android:textSize="10sp" />
+    </android.support.v7.widget.Toolbar>
+    <EditText
+        android:layout_below="@id/mine_require_mainTool"
+        android:id="@+id/mine_require_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:background="@null"
+        android:inputType="textMultiLine"
+        android:lineSpacingMultiplier="1.5"
+        android:imeOptions="actionDone"
+        android:textSize="17sp"
+        android:hint="请留下您宝贵的意见。。。"
+        android:textColor="@color/colorBlack"
+        android:minLines="3"
+        android:gravity="left|top"
+        android:theme="@style/MyEditText" />
+</RelativeLayout>

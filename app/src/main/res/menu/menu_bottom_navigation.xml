@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/item_main"
+        android:icon="@mipmap/ic_home_white"
+        android:title="主页" />
+    <item
+        android:id="@+id/item_society"
+        android:icon="@mipmap/ic_society_white"
+        android:title="社区" />
+
+    <item
+        android:id="@+id/item_mine"
+        android:icon="@mipmap/ic_mine_white"
+        android:title="我的" />
+
+</menu>

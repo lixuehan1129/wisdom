@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="spinner_repair">
+        <item>水电维修</item>
+        <item>家具维修</item>
+        <item>电器维修</item>
+        <item>燃气维修</item>
+        <item>其他</item>
+    </string-array>
+
+    <string-array name="spinner_xiaoqu">
+        <item>科群大厦</item>
+        <item>科大5斋</item>
+        <item>机电楼</item>
+        <item>鸿博园</item>
+        <item>五道口</item>
+    </string-array>
+</resources>

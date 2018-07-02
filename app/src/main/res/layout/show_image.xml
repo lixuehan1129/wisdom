@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBlack">
+        <RelativeLayout
+            android:id="@+id/back_act"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <com.example.wisdompark19.ViewHelper.DragImageView
+               android:layout_width="fill_parent"
+               android:layout_height="fill_parent"
+               android:id="@+id/large_image"
+               android:adjustViewBounds="true"
+               android:layout_gravity="center">
+            </com.example.wisdompark19.ViewHelper.DragImageView>
+        </RelativeLayout>
+
+</LinearLayout>

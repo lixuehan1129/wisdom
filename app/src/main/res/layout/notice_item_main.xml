@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_message1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@drawable/bottom_lay">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="10dp"
+                android:paddingLeft="10dp">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/card_message_image1"
+                    android:layout_gravity="center"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    android:src="@mipmap/ic_launcher_round"/>
+                <TextView
+                    android:paddingLeft="10dp"
+                    android:text="具体内容"
+                    android:layout_gravity="center"
+                    android:id="@+id/card_message_content1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minLines="1"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorGray_1"/>
+            </LinearLayout>
+            <TextView
+                android:paddingRight="20dp"
+                android:id="@+id/card_message_time1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="01月24日"
+                android:textSize="12sp"
+                android:textColor="@color/colorGray_1"
+                android:gravity="right" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:visibility="invisible"
+                android:id="@+id/card_message_id1"/>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+</android.support.constraint.ConstraintLayout>

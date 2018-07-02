@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/society_tucao_page_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/colorGray_White">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/society_tocao_page_mainTool"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorBlue"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:titleTextColor="@color/colorWhite"
+        android:paddingRight="15dp">
+        <Button
+            android:id="@+id/society_tocao_page_ok"
+            android:layout_width="40dp"
+            android:layout_height="25dp"
+            android:layout_gravity="end"
+            android:background="@drawable/button_ok"
+            android:text="完成"
+            android:textColor="@color/colorWhite"
+            android:textSize="10sp" />
+    </android.support.v7.widget.Toolbar>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:background="@color/colorGray_White">
+        <android.support.v7.widget.CardView
+            android:id="@+id/society_tucao_page_cv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="20dp"
+            app:cardCornerRadius="5dp">
+            <EditText
+                android:id="@+id/society_tucao_page_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="25dp"
+                android:paddingTop="15dp"
+                android:background="@null"
+                android:inputType="textMultiLine"
+                android:lineSpacingMultiplier="1.5"
+                android:textSize="18sp"
+                android:minLines="4"
+                android:gravity="top"
+                android:theme="@style/MyEditText" />
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
+</LinearLayout>

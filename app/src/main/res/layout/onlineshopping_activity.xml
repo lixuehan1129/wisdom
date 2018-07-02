@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:layout_width="match_parent"
+android:layout_height="match_parent">
+
+<android.support.v7.widget.Toolbar
+    android:id="@+id/shop_mainTool"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="@color/colorBlue"
+    app:titleTextColor="@color/colorWhite"
+    android:paddingRight="15dp"
+    android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+    <Button
+        android:id="@+id/shop_ok"
+        android:layout_width="40dp"
+        android:layout_height="25dp"
+        android:layout_gravity="end"
+        android:background="@drawable/button_ok"
+        android:text="发布"
+        android:textColor="@color/colorWhite"
+        android:textSize="10sp" />
+
+    <Button
+        android:id="@+id/shop_dingdan"
+        android:layout_width="50dp"
+        android:layout_height="25dp"
+        android:layout_gravity="end"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/button_ok"
+        android:text="查看订单"
+        android:textColor="@color/colorWhite"
+        android:textSize="10sp" />
+</android.support.v7.widget.Toolbar>
+
+<android.support.v4.widget.SwipeRefreshLayout
+    android:id="@+id/shop_swip"
+    android:layout_below="@id/shop_mainTool"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/shop_trade_rec"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </android.support.v7.widget.RecyclerView>
+</android.support.v4.widget.SwipeRefreshLayout>
+
+
+
+</RelativeLayout>
