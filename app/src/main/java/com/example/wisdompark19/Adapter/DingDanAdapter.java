@@ -19,7 +19,7 @@ public class DingDanAdapter extends RecyclerView.Adapter<DingDanAdapter.ViewHold
     private List<Ding_Dan> mDataSet;
     private OnItemClickListener mOnItemClickListener;
     private OnLongItemClickListener mOnLongItemClickListener;
-    private Context mContext;///
+    private Context mContext;
 
     class ViewHolder extends RecyclerView.ViewHolder{
 
