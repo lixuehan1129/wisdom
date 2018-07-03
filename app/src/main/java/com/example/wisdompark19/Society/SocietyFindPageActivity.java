@@ -1,6 +1,7 @@
 package com.example.wisdompark19.Society;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -556,31 +557,32 @@ public class SocietyFindPageActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case AppConstants.CAMERA:{
-                System.out.println("111");
-                Uri uri = null;
-                if (data != null && data.getData() != null) {
-                    uri = data.getData();
-                }
-                if (uri == null) {
-                    if (photoUri != null) {
-                        uri = photoUri;
+            switch (requestCode) {
+                case AppConstants.CAMERA:{
+                    System.out.println("111");
+                    Uri uri = null;
+                    if (data != null && data.getData() != null) {
+                        uri = data.getData();
                     }
+                    if (uri == null) {
+                        if (photoUri != null) {
+                            uri = photoUri;
+                        }
+                    }
+                    System.out.println(uri);
+                    showImage(DealBitmap.getRealFilePath(SocietyFindPageActivity.this,uri));
+                    break;
                 }
-                System.out.println(uri);
-                showImage(DealBitmap.getRealFilePath(SocietyFindPageActivity.this,uri));
-                break;
+                case AppConstants.ALBUM:
+                    if (data != null) {
+                        Uri uri = data.getData();
+                        String imagePath;
+                        imagePath = getImageAbsolutePath(this, uri);
+                        showImage(imagePath);
+                    }
+                    break;
             }
-            case AppConstants.ALBUM:
-                if (data != null) {
-                    Uri uri = data.getData();
-                    String imagePath;
-                    imagePath = getImageAbsolutePath(this, uri);
-                    showImage(imagePath);
-                }
-                break;
-        }
+
     }
 
     /**

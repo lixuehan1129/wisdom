@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">乐博智慧社区</string>
 
+    <string name="app_id">5afd1c55</string>
     <string name="cancle">取消</string>
     <string name="title">请选择时间</string>
     <string name="commit">确定</string>

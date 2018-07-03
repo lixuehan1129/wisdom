@@ -75,8 +75,8 @@ public class MainFragment extends BaseFragment {
             R.mipmap.ic_main_code,
             R.mipmap.ic_main_map,
             R.mipmap.ic_main_waishe,
+            R.mipmap.ic_main_face,
             R.mipmap.ic_main_more,
-            0
 
     };
     private String[] mContent = {
@@ -87,8 +87,8 @@ public class MainFragment extends BaseFragment {
             "我的位置",
    //         "外设接口",
             "咨询中心",
-            "更多",
-            null
+            "人脸信息",
+            "更多"
     };
 
     private ViewFlipper viewFlipper;
@@ -249,10 +249,15 @@ public class MainFragment extends BaseFragment {
                         startActivity(intent);
                     }break;
                     case 6:{
-                        Toast toast=Toast.makeText(getActivity(), "正在更新", Toast.LENGTH_SHORT);
-                        toast.show();
+                        //     Intent intent = new Intent(getActivity(),PeripheralActivity.class);
+                        //    intent.putExtra("put_data_waishe","外设接口");
+                        Intent intent = new Intent(getActivity(),FaceActivity.class);
+                        intent.putExtra("put_data_face","人脸录入");
+                        startActivity(intent);
                     }break;
                     case 7:{
+                        Toast toast=Toast.makeText(getActivity(), "正在更新", Toast.LENGTH_SHORT);
+                        toast.show();
                     }break;
 
                 }
