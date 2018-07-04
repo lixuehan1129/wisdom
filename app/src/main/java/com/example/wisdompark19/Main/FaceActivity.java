@@ -55,7 +55,6 @@ public class FaceActivity extends AppCompatActivity {
     private byte[] mImageData = null;
     // authid为6-18个字符长度，用于唯一标识用户
     private String mAuthid = null;
-    private Toast mToast;
     // 进度对话框
     private ProgressDialog mProDialog;
 
@@ -250,6 +249,7 @@ public class FaceActivity extends AppCompatActivity {
                     showTip("注册成功");
                 }else {
                     showTip(new SpeechError(ret).getPlainDescription(true));
+                 //   showTip("照片不合适，请重新拍照");
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -437,7 +437,6 @@ public class FaceActivity extends AppCompatActivity {
     }
 
     private void showTip(final String str) {
-        mToast.setText(str);
-        mToast.show();
+        Toast.makeText(FaceActivity.this,str,Toast.LENGTH_LONG).show();
     }
 }

@@ -33,6 +33,7 @@ import com.example.wisdompark19.AutoProject.AppConstants;
 import com.example.wisdompark19.AutoProject.DealBitmap;
 import com.example.wisdompark19.AutoProject.SharePreferences;
 import com.example.wisdompark19.AutoProject.TimeChange;
+import com.example.wisdompark19.FaceUtil.FaceTestActivity;
 import com.example.wisdompark19.R;
 import com.example.wisdompark19.Repair.RepairActivity;
 import com.example.wisdompark19.Shop.ShopActivity;
@@ -88,7 +89,7 @@ public class MainFragment extends BaseFragment {
    //         "外设接口",
             "咨询中心",
             "人脸信息",
-            "更多"
+            "人脸测试"
     };
 
     private ViewFlipper viewFlipper;
@@ -256,8 +257,11 @@ public class MainFragment extends BaseFragment {
                         startActivity(intent);
                     }break;
                     case 7:{
-                        Toast toast=Toast.makeText(getActivity(), "正在更新", Toast.LENGTH_SHORT);
-                        toast.show();
+//                        Toast toast=Toast.makeText(getActivity(), "正在更新", Toast.LENGTH_SHORT);
+//                        toast.show();
+                        Intent intent = new Intent(getActivity(),FaceTestActivity.class);
+                        intent.putExtra("put_data_test","人脸测试");
+                        startActivity(intent);
                     }break;
 
                 }
