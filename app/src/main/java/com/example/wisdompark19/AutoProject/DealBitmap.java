@@ -175,6 +175,15 @@ public class DealBitmap {
          }
 
     /**
+     * 把Bitmap转Byte
+     */
+    public static byte[] Bitmap2Bytes(Bitmap bm){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        return baos.toByteArray();
+    }
+
+    /**
 
      * @param bitmap      原图
      * @return  缩放截取正中部分后的位图。

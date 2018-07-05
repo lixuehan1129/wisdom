@@ -124,6 +124,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             + "guide_ans text, "
             + "guide_time text)";
 
+    public static final String CREATE_FACE ="create table face ("
+            + "id integer primary key autoincrement, "
+            + "face_phone text, "
+            + "face_name text, "
+            + "face_society text, "
+            + "face_picture blob)";
+
     private Context mContext;
 
     /**
@@ -155,6 +162,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_SHOP);
         db.execSQL(CREATE_PAY);
         db.execSQL(CREATE_GUIDE);
+        db.execSQL(CREATE_FACE);
     }
 
     //数据库升级
@@ -168,6 +176,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.execSQL("drop table if exists shop");
         db.execSQL("drop table if exists pay");
         db.execSQL("drop table if exists guide");
+        db.execSQL("drop table if exists face");
         onCreate(db);
     }
 
