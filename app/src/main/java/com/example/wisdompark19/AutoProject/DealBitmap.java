@@ -97,6 +97,13 @@ public class DealBitmap {
         return bitmap;
     }
 
+    public static InputStream BitmapToInput(Bitmap bitmap){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        InputStream isBm = new ByteArrayInputStream(baos.toByteArray());
+        return isBm;
+    }
+
     public static Bitmap byteToBit(byte[] bytes){
         Bitmap b = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
         return b;

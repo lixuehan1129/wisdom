@@ -121,17 +121,6 @@ public class FaceActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        mIdVerifier = IdentityVerifier.createVerifier(FaceActivity.this, new InitListener() {
-            @Override
-            public void onInit(int errorCode) {
-                if (ErrorCode.SUCCESS == errorCode) {
-                    showTip("引擎初始化成功");
-                    ButtonClick();
-                } else {
-                    showTip("引擎初始化失败，错误码：" + errorCode);
-                }
-            }
-        });
     }
 
     /**
@@ -157,6 +146,19 @@ public class FaceActivity extends AppCompatActivity {
         mProDialog.setCancelable(true);
         mProDialog.setTitle("请稍后");
 
+        mIdVerifier = IdentityVerifier.createVerifier(FaceActivity.this, new InitListener() {
+            @Override
+            public void onInit(int errorCode) {
+                if (ErrorCode.SUCCESS == errorCode) {
+                    showTip("引擎初始化成功");
+                    ButtonClick();
+                } else {
+                    showTip("引擎初始化失败，错误码：" + errorCode);
+                    //           showTip("出现错误！");
+                }
+            }
+        });
+
         mProDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
@@ -164,6 +166,15 @@ public class FaceActivity extends AppCompatActivity {
                 if (null != mIdVerifier) {
                     mIdVerifier.cancel();
                 }
+            }
+        });
+
+        Button face_test = (Button) findViewById(R.id.face_test);
+        face_test.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(FaceActivity.this,FaceTestActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -178,7 +189,6 @@ public class FaceActivity extends AppCompatActivity {
             public void onClick(View v) {
                 face_sure = 1;
                 takePhoto();
-                System.out.println("添加啊");
             }
         });
         //修改人脸信息
@@ -186,9 +196,9 @@ public class FaceActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // 人脸模型删除
-                System.out.println("修改啊");
-                mModelCmd = MODEL_DEL;
-                executeModelCommand("delete");
+//                mModelCmd = MODEL_DEL;
+//                executeModelCommand("delete");
+                takePhoto();
             }
         });
         //注册人脸信息
@@ -196,55 +206,17 @@ public class FaceActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(!TextUtils.isEmpty(mAuthid)){
-                    if (null != mImageData) {
+                    if(null != mImageData){
                         mProDialog.setMessage("注册中...");
                         mProDialog.show();
-                        // 设置用户标识，格式为6-18个字符（由字母、数字、下划线组成，不得以数字开头，不能包含空格）。
-                        // 当不设置时，云端将使用用户设备的设备ID来标识终端用户。
-                        // 设置人脸注册参数
-                        // 清空参数
-                        mIdVerifier.setParameter(SpeechConstant.PARAMS, null);
-                        // 设置会话场景
-                        mIdVerifier.setParameter(SpeechConstant.MFV_SCENES, "ifr");
-                        // 设置会话类型
-                        mIdVerifier.setParameter(SpeechConstant.MFV_SST, "enroll");
-                        // 设置用户id
-                        mIdVerifier.setParameter(SpeechConstant.AUTH_ID, mAuthid);
-                        // 设置监听器，开始会话
-                        mIdVerifier.startWorking(mEnrollListener);
-
-                        // 子业务执行参数，若无可以传空字符传
-                        StringBuffer params = new StringBuffer();
-                        // 向子业务写入数据，人脸数据可以一次写入
-                        mIdVerifier.writeData("ifr", params.toString(), mImageData, 0, mImageData.length);
-                        // 停止写入
-                        mIdVerifier.stopWrite("ifr");
-                    } else if(localImage != null){
-                        byte[] mImageData = DealBitmap.Bitmap2Bytes(localImage);
-                        mProDialog.setMessage("注册中...");
-                        mProDialog.show();
-                        // 设置用户标识，格式为6-18个字符（由字母、数字、下划线组成，不得以数字开头，不能包含空格）。
-                        // 当不设置时，云端将使用用户设备的设备ID来标识终端用户。
-                        // 设置人脸注册参数
-                        // 清空参数
-                        mIdVerifier.setParameter(SpeechConstant.PARAMS, null);
-                        // 设置会话场景
-                        mIdVerifier.setParameter(SpeechConstant.MFV_SCENES, "ifr");
-                        // 设置会话类型
-                        mIdVerifier.setParameter(SpeechConstant.MFV_SST, "enroll");
-                        // 设置用户id
-                        mIdVerifier.setParameter(SpeechConstant.AUTH_ID, mAuthid);
-                        // 设置监听器，开始会话
-                        mIdVerifier.startWorking(mEnrollListener);
-
-                        // 子业务执行参数，若无可以传空字符传
-                        StringBuffer params = new StringBuffer();
-                        // 向子业务写入数据，人脸数据可以一次写入
-                        mIdVerifier.writeData("ifr", params.toString(), mImageData, 0, mImageData.length);
-                        // 停止写入
-                        mIdVerifier.stopWrite("ifr");
+                        if(face_sure == 0){
+                            mModelCmd = MODEL_DEL;
+                            executeModelCommand("delete");
+                        }else if(face_sure == 1){
+                            regeist();
+                        }
                     }else {
-                        showTip("请选择图片后再注册");
+                        showTip("请选择照片后注册");
                     }
                 }
             }
@@ -255,6 +227,31 @@ public class FaceActivity extends AppCompatActivity {
             showTip( "出现错误："+ret );
         }
     }
+
+    private void regeist(){
+//        if (null != mImageData) {
+            // 设置用户标识，格式为6-18个字符（由字母、数字、下划线组成，不得以数字开头，不能包含空格）。
+            // 当不设置时，云端将使用用户设备的设备ID来标识终端用户。
+            // 设置人脸注册参数
+            // 清空参数
+            mIdVerifier.setParameter(SpeechConstant.PARAMS, null);
+            // 设置会话场景
+            mIdVerifier.setParameter(SpeechConstant.MFV_SCENES, "ifr");
+            // 设置会话类型
+            mIdVerifier.setParameter(SpeechConstant.MFV_SST, "enroll");
+            // 设置用户id
+            mIdVerifier.setParameter(SpeechConstant.AUTH_ID, mAuthid);
+            // 设置监听器，开始会话
+            mIdVerifier.startWorking(mEnrollListener);
+
+            // 子业务执行参数，若无可以传空字符传
+            StringBuffer params = new StringBuffer();
+            // 向子业务写入数据，人脸数据可以一次写入
+            mIdVerifier.writeData("ifr", params.toString(), mImageData, 0, mImageData.length);
+            // 停止写入
+            mIdVerifier.stopWrite("ifr");
+    }
+
 
 
     private void takePhoto(){
@@ -359,7 +356,9 @@ public class FaceActivity extends AppCompatActivity {
                 case MODEL_DEL:
                     if (ErrorCode.SUCCESS == ret) {
                         showTip("删除成功");
-                        takePhoto();
+                        regeist();
+                     //   showTip("请重新提交信息");
+                     //   takePhoto();
                     } else {
                         showTip("删除失败");
                         takePhoto();
@@ -395,25 +394,25 @@ public class FaceActivity extends AppCompatActivity {
                         java.sql.PreparedStatement preparedStatement = null;
                         SQLiteDatabase sqLiteDatabase = dataBaseHelper.getWritableDatabase();
                         if(face_sure == 1){
-                            String sql_saveData = "insert into face (face_phone,face_name,face_society,face_picture) " +
-                                    "values(?,?,?,?)";
+                            String sql_saveData = "insert into face (face_phone,face_society,face_picture) " +
+                                    "values(?,?,?)";
                             preparedStatement = (java.sql.PreparedStatement)conn.prepareStatement(sql_saveData,Statement.RETURN_GENERATED_KEYS);
                             preparedStatement.setString(1, mAuthid);
-                            preparedStatement.setString(2, SharePreferences.getString(FaceActivity.this, AppConstants.USER_NAME));
-                            preparedStatement.setString(3, SharePreferences.getString(FaceActivity.this, AppConstants.USER_AREA));
+                            preparedStatement.setString(2, SharePreferences.getString(FaceActivity.this, AppConstants.USER_AREA));
                             if(mPictureFile.exists()){
                                 try {
                                     InputStream inputStream = new FileInputStream(mPictureFile);
-                                    preparedStatement.setBinaryStream(4,inputStream,mPictureFile.length());
+                                    preparedStatement.setBinaryStream(3,inputStream,mPictureFile.length());
                                 } catch (FileNotFoundException e) {
                                     e.printStackTrace();
                                 }
                             }
+                            //注册前首先加入群组
                             FaceGroupManager.joinGroup(FaceActivity.this,"4124828422",mAuthid);
+                            //信息保存本地
                             ContentValues values = new ContentValues();
                             values.put("face_phone",mAuthid);
                             values.put("face_society",SharePreferences.getString(FaceActivity.this, AppConstants.USER_AREA));
-                            values.put("face_name",SharePreferences.getString(FaceActivity.this, AppConstants.USER_NAME));
                             values.put("face_picture",DealBitmap.Bitmap2Bytes(mImage));
                             sqLiteDatabase.insert("face",null,values);
                         }else {
@@ -426,10 +425,18 @@ public class FaceActivity extends AppCompatActivity {
                                 } catch (FileNotFoundException e) {
                                     e.printStackTrace();
                                 }
+                            }else if(localImage != null){
+                                InputStream inputStream = null;
+                                inputStream = DealBitmap.BitmapToInput(localImage);
+                                preparedStatement.setBinaryStream(1,inputStream,mPictureFile.length());
                             }
                             preparedStatement.setString(2,mAuthid);
                             ContentValues values = new ContentValues();
-                            values.put("face_picture",DealBitmap.Bitmap2Bytes(mImage));
+                            if(mImage == null){
+                                values.put("face_picture",DealBitmap.Bitmap2Bytes(localImage));
+                            }else {
+                                values.put("face_picture",DealBitmap.Bitmap2Bytes(mImage));
+                            }
                             sqLiteDatabase.update("face",values,"face_phone = ?",
                                     new String[]{mAuthid});
                         }
@@ -468,6 +475,7 @@ public class FaceActivity extends AppCompatActivity {
             if(cursor.getCount() == 0){
                 connectNewData();
                 face_rem.getLayoutParams().height = 0;
+                face_add.getLayoutParams().height = Toolbar.LayoutParams.WRAP_CONTENT;
             }else {
                 while (cursor.moveToNext()){
                     byte[] bytes = cursor.getBlob(cursor.getColumnIndex("face_picture"));
@@ -477,6 +485,7 @@ public class FaceActivity extends AppCompatActivity {
                     }
                 }
                 face_add.getLayoutParams().height = 0;
+                face_rem.getLayoutParams().height = Toolbar.LayoutParams.WRAP_CONTENT;
             }
             cursor.close();
         }
@@ -484,6 +493,7 @@ public class FaceActivity extends AppCompatActivity {
     }
 
     private void connectNewData(){
+        final ProgressDialog progressDialog = ProgressDialog.show(FaceActivity.this,"","正在检查更新...",true);
         new Thread(){
             public void run(){
                 try{
@@ -502,7 +512,6 @@ public class FaceActivity extends AppCompatActivity {
                             ContentValues values = new ContentValues();
                             Blob picture = resultSet.getBlob("face_picture");
                             if(picture != null){
-                                values.put("face_name",resultSet.getString("face_name"));
                                 values.put("face_phone",resultSet.getString("face_phone"));
                                 values.put("face_society",resultSet.getString("face_society"));
                                 values.put("face_picture",DealBitmap.blobToBytes(picture));
@@ -511,14 +520,18 @@ public class FaceActivity extends AppCompatActivity {
                             Message message = new Message();
                             message.what = UPDATE_FACE;
                             handler_face.sendMessage(message);
+                        }else {
+                            showTip("您还没有添加人脸信息！");
                         }
                         sqLiteDatabase.close();
                         resultSet.close();
                         JDBCTools.releaseConnection(stmt,conn);
+                        progressDialog.dismiss();
                     }else {
                         Log.d("调试", "连接失败,人脸信息");
                         Toast toast = Toast.makeText(FaceActivity.this, "请检查网络", Toast.LENGTH_SHORT);
                         toast.show();
+                        progressDialog.dismiss();
                     }
                 }catch (SQLException e) {
                     e.printStackTrace();

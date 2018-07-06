@@ -1,5 +1,6 @@
 package com.example.wisdompark19.FaceUtil;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -12,6 +13,9 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -20,9 +24,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.wisdompark19.AutoProject.AppConstants;
+import com.example.wisdompark19.AutoProject.JDBCTools;
 import com.example.wisdompark19.AutoProject.SharePreferences;
 import com.example.wisdompark19.Main.FaceActivity;
 import com.example.wisdompark19.R;
@@ -33,7 +39,9 @@ import com.iflytek.cloud.IdentityVerifier;
 import com.iflytek.cloud.InitListener;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechError;
+import com.mysql.jdbc.Connection;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -42,14 +50,20 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class FaceTestActivity extends AppCompatActivity {
 
     private final static String TAG = FaceTestActivity.class.getSimpleName();
+
     private Button face_test_create,face_test_join,face_test_delete,face_test_add,face_test_ide;
     private ImageView face_test_image;
+    private TextView face_test_text;
+    private String name,score;
     // 拍照得到的照片文件
     private File mPictureFile;
     // 选择图片后返回
@@ -83,13 +97,22 @@ public class FaceTestActivity extends AppCompatActivity {
             @Override
             public void onInit(int errorCode) {
                 if (ErrorCode.SUCCESS == errorCode) {
-                    showTip("引擎初始化成功");
+                   // showTip("引擎初始化成功");
                 } else {
                     showTip("引擎初始化失败，错误码：" + errorCode);
                 }
             }
         });
         findView();
+    }
+
+    /**
+     *退出当前Activity时被调用,调用之后Activity就结束了
+     */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mIdVerifier.destroy();
     }
 
     private void findView(){
@@ -99,6 +122,7 @@ public class FaceTestActivity extends AppCompatActivity {
         face_test_image = (ImageView) findViewById(R.id.face_test_image);
         face_test_add = (Button) findViewById(R.id.face_test_add);
         face_test_ide = (Button) findViewById(R.id.face_test_ide);
+        face_test_text = (TextView) findViewById(R.id.face_test_text);
         mProDialog = new ProgressDialog(FaceTestActivity.this);
 
         final String groupName = SharePreferences.getString(FaceTestActivity.this, AppConstants.USER_AREA) + "11";
@@ -150,7 +174,7 @@ public class FaceTestActivity extends AppCompatActivity {
                         @Override
                         public void onResult(IdentityResult identityResult, boolean b) {
                             Log.d(TAG, identityResult.getResultString());
-                            dismissProDialog();
+                         //   dismissProDialog();
                             handleResult(identityResult);
                         }
 
@@ -210,20 +234,21 @@ public class FaceTestActivity extends AppCompatActivity {
             JSONObject resultJson = new JSONObject(resultStr);
             if(ErrorCode.SUCCESS == resultJson.getInt("ret"))
             {
-                // 跳转到结果展示页面
-//                Intent intent = new Intent(FaceIdentifyActivity.this, ResultIdentifyActivity.class);
-//                intent.putExtra("result", resultStr);
-//                startActivity(intent);
-//                this.finish();
                 try {
                     JSONObject obj = new JSONObject(resultStr);
                     // 组名称
 
                     JSONObject ifv_result = obj.getJSONObject("ifv_result");
-                    System.out.println("身份鉴别"+ifv_result.getJSONArray("candidates"));
-
+                //    System.out.println("身份鉴别1"+ifv_result);
+                    JSONArray candidates = ifv_result.getJSONArray("candidates");
+                //    System.out.println("身份鉴别2"+candidates);
+                    JSONObject face_ide = (JSONObject) candidates.get(0);
+                //    System.out.println("身份鉴别3"+face_ide);
                     // 鉴别结果
-                    // 绑定XML中的ListView，作为Item的容器
+                    String face_phone = face_ide.optString("user");
+                    String face_score = face_ide.optString("score");
+                    score = face_score;
+                    connectName(face_phone);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -236,6 +261,55 @@ public class FaceTestActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+    private void connectName(final String face_phone){
+        new Thread(){
+            public void run(){
+                try {
+                    Looper.prepare();
+                    Connection conn = JDBCTools.getConnection("shequ", "Zz123456");
+                    if (conn != null) { //判断
+                        Log.d("调试", "连接成功");
+                        Statement stmt = conn.createStatement(); //根据返回的Connection对象创建 Statement对象
+                        String sql_name = "select user_name from user where user_phone = '" +
+                                face_phone +
+                                "' limit 1";
+                        ResultSet resultSet = stmt.executeQuery(sql_name);
+                        if(resultSet.first()){
+                            name = resultSet.getString("user_name");
+                            Message message = new Message();
+                            message.what = 1;
+                            handler_face.sendMessage(message);
+                        }
+                        resultSet.close();
+                        JDBCTools.releaseConnection(stmt,conn);
+                        dismissProDialog();
+                    }
+                }catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                Looper.loop();
+            }
+        }.start();
+    }
+
+    private Handler handler_face = new Handler(new Handler.Callback() {
+        @SuppressLint("SetTextI18n")
+        @Override
+        public boolean handleMessage(Message msg) {
+            // TODO Auto-generated method stub
+            switch (msg.what){
+                case 1:{
+                  face_test_text.setText("姓名:  " + name + "\n" + "相似度:  " + score);
+                    break;
+                }
+                default:
+                    break;
+            }
+            return false;
+        }
+    });
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

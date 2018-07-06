@@ -127,7 +127,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public static final String CREATE_FACE ="create table face ("
             + "id integer primary key autoincrement, "
             + "face_phone text, "
-            + "face_name text, "
             + "face_society text, "
             + "face_picture blob)";
 

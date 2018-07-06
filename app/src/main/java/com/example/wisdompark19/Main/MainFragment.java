@@ -89,7 +89,7 @@ public class MainFragment extends BaseFragment {
    //         "外设接口",
             "咨询中心",
             "人脸信息",
-            "人脸测试"
+            "更多"
     };
 
     private ViewFlipper viewFlipper;
@@ -257,11 +257,11 @@ public class MainFragment extends BaseFragment {
                         startActivity(intent);
                     }break;
                     case 7:{
-//                        Toast toast=Toast.makeText(getActivity(), "正在更新", Toast.LENGTH_SHORT);
-//                        toast.show();
-                        Intent intent = new Intent(getActivity(),FaceTestActivity.class);
-                        intent.putExtra("put_data_test","人脸测试");
-                        startActivity(intent);
+                        Toast toast=Toast.makeText(getActivity(), "正在更新", Toast.LENGTH_SHORT);
+                        toast.show();
+//                        Intent intent = new Intent(getActivity(),FaceTestActivity.class);
+//                        intent.putExtra("put_data_test","人脸测试");
+//                        startActivity(intent);
                     }break;
 
                 }
