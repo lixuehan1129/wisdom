@@ -27,5 +27,5 @@ public class AppConstants {
     public static final String SHOP_TIME = "app_shop_time";
     public static final String REPAIR_TIME = "app_repair_time";
     public static final String GUIDE_TIME = "app_guide_time";
-    public static final int SQL_VISION = 1;
+    public static final int SQL_VISION = 2;
 }

@@ -228,7 +228,6 @@ public class FaceTestActivity extends AppCompatActivity {
         if (null == result) {
             return;
         }
-
         try {
             String resultStr = result.getResultString();
             JSONObject resultJson = new JSONObject(resultStr);
@@ -309,7 +308,6 @@ public class FaceTestActivity extends AppCompatActivity {
             return false;
         }
     });
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

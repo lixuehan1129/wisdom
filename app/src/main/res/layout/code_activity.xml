@@ -22,85 +22,127 @@
         android:layout_height="match_parent"
         android:gravity="center">
         <LinearLayout
-            android:padding="40dp"
+            android:paddingTop="20dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@drawable/cornors_back">
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/code_picture"
-                    android:paddingRight="10dp"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:src="@mipmap/ic_launcher_round"
-                    app:civ_border_width="1dp"
-                    app:civ_border_color="@color/colorGray"/>
+            <RelativeLayout
+                android:paddingRight="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
                 <LinearLayout
-                    android:padding="5dp"
-                    android:layout_gravity="center"
+                    android:id="@+id/code_activity_li"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
                     <TextView
-                        android:id="@+id/code_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="姓名"
+                        android:text="添加人脸信息 "
+                        android:textColor="@color/colorBlueBit"
+                        android:textSize="14sp" />
+                    <ImageView
+                        android:layout_width="23dp"
+                        android:layout_height="23dp"
+                        android:background="@mipmap/ic_main_face"/>
+                </LinearLayout>
+
+
+            </RelativeLayout>
+            <LinearLayout
+                android:paddingTop="8dp"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:paddingBottom="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/code_picture"
+                        android:paddingRight="10dp"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:src="@mipmap/ic_launcher_round"
+                        app:civ_border_width="1dp"
+                        app:civ_border_color="@color/colorGray"/>
+                    <LinearLayout
+                        android:padding="5dp"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/code_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="姓名"
+                            android:textSize="14sp"
+                            android:textColor="@color/colorBlack"/>
+                        <TextView
+                            android:id="@+id/code_add"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="地址"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/code_activity_iv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:paddingTop="7dp"
+                    android:paddingBottom="15dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="11sp"
+                    android:text="扫描二维码，验证身份"/>
+                <LinearLayout
+                    android:id="@+id/code_create"
+                    android:padding="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/cornors_back_blue">
+                    <TextView
+                        android:paddingTop="8dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="点击生成访客二维码"
                         android:textSize="14sp"
                         android:textColor="@color/colorBlack"/>
                     <TextView
-                        android:id="@+id/code_add"
-                        android:layout_width="wrap_content"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="10dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="地址"
-                        android:textSize="14sp" />
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="发送给朋友，使用此二维码进入小区"
+                        android:textSize="11sp"/>
                 </LinearLayout>
-            </LinearLayout>
 
-            <ImageView
-                android:id="@+id/code_activity_iv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:paddingTop="7dp"
-                android:paddingBottom="20dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textSize="11sp"
-                android:text="扫描二维码，验证身份"/>
-            <LinearLayout
-                android:id="@+id/code_create"
-                android:padding="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@drawable/cornors_back_blue">
-                <TextView
-                    android:paddingTop="8dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="点击生成访客二维码"
-                    android:textSize="14sp"
-                    android:textColor="@color/colorBlack"/>
-                <TextView
-                    android:paddingTop="8dp"
-                    android:paddingBottom="10dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="发送给朋友，使用此二维码进入小区"
-                    android:textSize="11sp"/>
             </LinearLayout>
         </LinearLayout>
+
 
     </RelativeLayout>
 

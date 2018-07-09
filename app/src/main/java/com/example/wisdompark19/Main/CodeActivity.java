@@ -88,6 +88,16 @@ public class CodeActivity extends AppCompatActivity {
                 showNewPage();
             }
         });
+
+        LinearLayout li_face = (LinearLayout) findViewById(R.id.code_activity_li);
+        li_face.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CodeActivity.this,FaceActivity.class);
+                intent.putExtra("put_data_face","人脸录入");
+                startActivity(intent);
+            }
+        });
     }
 
     private Bitmap getPicture(){

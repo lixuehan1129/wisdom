@@ -33,7 +33,6 @@ import com.example.wisdompark19.AutoProject.AppConstants;
 import com.example.wisdompark19.AutoProject.DealBitmap;
 import com.example.wisdompark19.AutoProject.SharePreferences;
 import com.example.wisdompark19.AutoProject.TimeChange;
-import com.example.wisdompark19.FaceUtil.FaceTestActivity;
 import com.example.wisdompark19.R;
 import com.example.wisdompark19.Repair.RepairActivity;
 import com.example.wisdompark19.Shop.ShopActivity;
@@ -76,9 +75,9 @@ public class MainFragment extends BaseFragment {
             R.mipmap.ic_main_code,
             R.mipmap.ic_main_map,
             R.mipmap.ic_main_waishe,
-            R.mipmap.ic_main_face,
+    //        R.mipmap.ic_main_face,
             R.mipmap.ic_main_more,
-
+            0
     };
     private String[] mContent = {
             "生活缴费",
@@ -88,8 +87,9 @@ public class MainFragment extends BaseFragment {
             "我的位置",
    //         "外设接口",
             "咨询中心",
-            "人脸信息",
-            "更多"
+  //          "人脸信息",
+            "更多",
+            null
     };
 
     private ViewFlipper viewFlipper;
@@ -243,25 +243,21 @@ public class MainFragment extends BaseFragment {
                         startActivity(intent);
                     }break;
                     case 5:{
-                   //     Intent intent = new Intent(getActivity(),PeripheralActivity.class);
-                    //    intent.putExtra("put_data_waishe","外设接口");
                         Intent intent = new Intent(getActivity(),GuideActivity.class);
                         intent.putExtra("put_data_waishe","咨询中心");
                         startActivity(intent);
                     }break;
+//                    case 6:{
+//                        Toast toast=Toast.makeText(getActivity(), "进入通行证界面查看", Toast.LENGTH_SHORT);
+//                        toast.show();
+////                        Intent intent = new Intent(getActivity(),FaceActivity.class);
+////                        intent.putExtra("put_data_face","人脸录入");
+////                        startActivity(intent);
+//                    }break;
                     case 6:{
-                        //     Intent intent = new Intent(getActivity(),PeripheralActivity.class);
-                        //    intent.putExtra("put_data_waishe","外设接口");
-                        Intent intent = new Intent(getActivity(),FaceActivity.class);
-                        intent.putExtra("put_data_face","人脸录入");
-                        startActivity(intent);
-                    }break;
-                    case 7:{
                         Toast toast=Toast.makeText(getActivity(), "正在更新", Toast.LENGTH_SHORT);
                         toast.show();
-//                        Intent intent = new Intent(getActivity(),FaceTestActivity.class);
-//                        intent.putExtra("put_data_test","人脸测试");
-//                        startActivity(intent);
+
                     }break;
 
                 }

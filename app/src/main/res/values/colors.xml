@@ -19,4 +19,5 @@
     <color name="colorGray_White">#f2f2f2</color>
     <color name="colorBlue_W">#ccffff</color>
     <color name="colorPink_W">#ffcccc</color>
+    <color name="colorBlueBit">#1296db</color>
 </resources>

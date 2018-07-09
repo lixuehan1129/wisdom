@@ -15,50 +15,98 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
     </android.support.v7.widget.Toolbar>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:layout_marginBottom="5dp"
-        android:gravity="center" >
+        android:layout_height="match_parent"
+        android:background="@color/colorGray_White"
+        android:gravity="center">
 
-        <ImageView
-            android:id="@+id/face_image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="4dp"
-            android:src="@drawable/no_photo" />
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="30dp"
+            android:background="@drawable/cornors_back"
+            android:orientation="vertical">
 
-    <Button
-        android:layout_gravity="center"
-        android:id="@+id/face_add"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="添加人脸信息"
-        android:textSize="25sp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="添加人脸信息，可以用于人脸验证，添加后可以修改。"
+                android:textSize="11sp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                android:text="拍照时请确认为正脸照，否则可能会验证失败！"
+                android:textSize="11sp"/>
 
-    <Button
-        android:layout_gravity="center"
-        android:id="@+id/face_rem"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="修改人脸信息"
-        android:textSize="25sp"/>
+            <ImageView
+                android:id="@+id/face_image"
+                android:layout_width="240dp"
+                android:layout_height="240dp"
+                android:padding="5dp"
+                android:src="@drawable/no_photo" />
 
-    <Button
-        android:layout_gravity="center"
-        android:id="@+id/face_reg"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="提交信息"
-        android:textSize="25sp"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"/>
 
-    <Button
-        android:layout_gravity="center"
-        android:id="@+id/face_test"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="进入人脸检测界面"
-        android:textSize="25sp"/>
+            <TextView
+                android:id="@+id/face_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="添加人脸信息"
+                android:textSize="16sp"
+                android:textColor="@color/colorBlack"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingLeft="50dp"
+                android:paddingRight="50dp"
+                android:background="@drawable/cornors_back_blue"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"/>
+
+            <TextView
+                android:id="@+id/face_rem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="修改人脸信息"
+                android:textSize="16sp"
+                android:textColor="@color/colorBlack"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingLeft="50dp"
+                android:paddingRight="50dp"
+                android:background="@drawable/cornors_back_blue"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"/>
+
+            <TextView
+                android:id="@+id/face_reg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="提交人脸信息"
+                android:textSize="16sp"
+                android:textColor="@color/colorBlack"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingLeft="50dp"
+                android:paddingRight="50dp"
+                android:background="@drawable/cornors_back_blue"/>
+
+            <!--<Button-->
+                <!--android:layout_gravity="center"-->
+                <!--android:id="@+id/face_test"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="进入人脸检测界面"-->
+                <!--android:textSize="25sp"/>-->
+        </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>
