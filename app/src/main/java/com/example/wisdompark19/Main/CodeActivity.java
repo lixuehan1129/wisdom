@@ -1,13 +1,16 @@
 package com.example.wisdompark19.Main;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -43,13 +46,14 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CodeActivity extends AppCompatActivity {
 
-    private DataBaseHelper dataBaseHelper = new DataBaseHelper(CodeActivity.this,AppConstants.SQL_VISION);
     private ImageView imageView;
     private ImageView imageView_f;
     private TextView code_cancel;
     private TextView code_ok;
+    private TextView code_time;
     private EditText code_name;
     private String code_sex_select;
+    private int TimeCheck = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -99,23 +103,6 @@ public class CodeActivity extends AppCompatActivity {
             }
         });
     }
-
-    private Bitmap getPicture(){
-        Bitmap picture = null;
-        SQLiteDatabase sqLiteDatabase = dataBaseHelper.getReadableDatabase();
-        @SuppressLint("Recycle") Cursor cursor = sqLiteDatabase.query("user",null,
-                "user_phone = ?",new String[]{
-                        SharePreferences.getString(CodeActivity.this,AppConstants.USER_PHONE)
-                },null,null,null);
-        while (cursor.moveToFirst()){
-            byte[] bytes = cursor.getBlob(cursor.getColumnIndex("user_picture"));
-            if(bytes != null){
-                picture = DealBitmap.byteToBit(bytes);
-            }
-        }
-        return picture;
-    }
-
 
 
     private void setView(){
@@ -192,6 +179,7 @@ public class CodeActivity extends AppCompatActivity {
         code_cancel = (TextView) view.findViewById(R.id.code_cancel);
         code_ok = (TextView) view.findViewById(R.id.code_ok);
         code_name = (EditText)view.findViewById(R.id.code_auto_name);
+        code_time = (TextView)view.findViewById(R.id.code_auto_time);
         RadioGroup code_sex = (RadioGroup) view.findViewById(R.id.code_sex);
         code_sex_select = "女";
         code_sex.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -203,6 +191,23 @@ public class CodeActivity extends AppCompatActivity {
                     code_sex_select = "女";
                 }
 
+            }
+        });
+
+        final String[] Items = new String[] {"一天", "一周", "一个月", "永久"};
+
+        code_time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(CodeActivity.this)
+                        .setTitle("选择时间")
+                        .setItems(Items, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                TimeCheck = which;
+                                code_time.setText(Items[which]);
+                            }
+                        }).create().show();
             }
         });
     }
@@ -247,7 +252,21 @@ public class CodeActivity extends AppCompatActivity {
     //获取系统时间，并进行格式转换
     private String getTime(){
         @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return simpleDateFormat.format(new Date());
+        Date nowData = new Date();
+        if(TimeCheck == 1){
+            Date nowDate1 = new Date(nowData.getTime() + (long) 7 * 24 * 60 * 60 * 1000);
+            return simpleDateFormat.format(nowDate1);
+        }else if(TimeCheck == 2){
+            Date nowDate2 = new Date(nowData.getTime() + (long) 30 * 24 * 60 * 60 * 1000);
+            return simpleDateFormat.format(nowDate2);
+        }else if(TimeCheck == 3){
+            Date nowDate3 = new Date(nowData.getTime());
+            SimpleDateFormat simpleDateFormat3 = new SimpleDateFormat("2099-MM-dd HH:mm:ss");
+            return simpleDateFormat3.format(nowDate3);
+        }else {
+            return simpleDateFormat.format(nowData);
+        }
+
     }
 
     //MD5加密

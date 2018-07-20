@@ -290,5 +290,5 @@ public static java.lang.String TABLENAME;
 -keep public class com.tencent.bugly.**{*;}
 -keep class android.support.**{*;}
 
--keep class com.iflytek.**{*;}
--keepattributes Signature
+
+-ignorewarnings -keep class * { public private *; }

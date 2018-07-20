@@ -218,9 +218,11 @@ public class MainFragment extends BaseFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position){
                     case 0:{
-                        Intent intent = new Intent(getActivity(),PayActivity.class);
-                        intent.putExtra("put_data_pay","生活缴费");
-                        startActivity(intent);
+                        Toast toast=Toast.makeText(getActivity(), "稍后开放.", Toast.LENGTH_SHORT);
+                        toast.show();
+//                        Intent intent = new Intent(getActivity(),PayActivity.class);
+//                        intent.putExtra("put_data_pay","生活缴费");
+//                        startActivity(intent);
                     }break;
                     case 1:{
                         Intent intent = new Intent(getActivity(),RepairActivity.class);
@@ -266,73 +268,6 @@ public class MainFragment extends BaseFragment {
         });
     }
 
-//    private void getData(){
-//        new Thread(){
-//            public void run(){
-//                try {
-//                    Connection conn = JDBCTools.getConnection("shequ","Zz123456");
-//                    if(conn!=null){ //判断 如果返回不为空则说明链接成功 如果为null的话则连接失败 请检查你的 mysql服务器地址是否可用 以及数据库名是否正确 并且 用户名跟密码是否正确
-//                        Log.d("调试","连接成功,滚动消息");
-//                        Statement stmt = conn.createStatement(); //根据返回的Connection对象创建 Statement对象
-//                        String sql = "select * from newmessage where newmessage_area = '" +
-//                                SharePreferences.getString(getActivity(),AppConstants.USER_AREA) +
-//                                "' order by newmessage_id desc limit 3";
-//                        ResultSet rs = stmt.executeQuery(sql); //使用executeQury方法执行sql语句 返回ResultSet对象 即查询的结果
-//                        List<String> content_name = new ArrayList<>();
-//                        while (rs.next()) {
-//                            content_name.add(rs.getString("newmessage_phone"));
-//                            initRollData(rs.getString("newmessage_title"),rs.getString("newmessage_content"),
-//                                    rs.getString("newmessage_time"),rs.getInt("newmessage_id"));
-//                        }
-//                        rs.close();
-//                        for(int i = 0; i<content_name.size(); i++){
-//                            String sql_content_name = "select * from user where user_phone = '" +
-//                                    content_name.get(i) +
-//                                    "'";
-//                            ResultSet resultSet_content_name = stmt.executeQuery(sql_content_name);
-//                            resultSet_content_name.next();
-//                            Bitmap picture_path = null;
-//                            Blob content_picture = resultSet_content_name.getBlob("user_picture");
-//                            if(content_picture != null){
-//                                InputStream inputStream = content_picture.getBinaryStream();
-//                                picture_path = DealBitmap.InputToBitmap(inputStream);
-//                            }
-//                            card_message_image.add(picture_path); //发布者头像
-//                            resultSet_content_name.close();
-//                        }
-//                        Message message = new Message();
-//                        message.what = UPDATE_ROLL;
-//                        handler_roll.sendMessage(message);
-//                        JDBCTools.releaseConnection(stmt,conn);
-//                    }else{
-//                        Log.d("调试","连接失败，滚动消息");
-//                    }
-//                } catch (SQLException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }.start();
-//    }
-//
-//    private Handler handler_roll = new Handler(new Handler.Callback() {
-//
-//        @Override
-//        public boolean handleMessage(Message msg) {
-//            // TODO Auto-generated method stub
-//            switch (msg.what){
-//                case UPDATE_ROLL:{
-//                    if(card_message_content.size() > 0){
-//                        textView.getLayoutParams().height = 0;
-//                        initRollNotice();
-//                    }
-//                    break;
-//                }
-//                default:
-//                    break;
-//            }
-//            return false;
-//        }
-//    });
 
     private void LocalData(){
         card_message_content = new ArrayList<>();
