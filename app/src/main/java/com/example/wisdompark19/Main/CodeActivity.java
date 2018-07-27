@@ -30,6 +30,7 @@ import com.example.wisdompark19.AutoProject.AppConstants;
 import com.example.wisdompark19.AutoProject.DealBitmap;
 import com.example.wisdompark19.AutoProject.QRCodeUtil;
 import com.example.wisdompark19.AutoProject.SharePreferences;
+import com.example.wisdompark19.BlueTooth.PrintActivity;
 import com.example.wisdompark19.R;
 import com.example.wisdompark19.ViewHelper.DataBaseHelper;
 
@@ -39,6 +40,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static android.content.DialogInterface.*;
 
 /**
  * Created by 最美人间四月天 on 2018/1/18.
@@ -131,11 +134,19 @@ public class CodeActivity extends AppCompatActivity {
         }
             String setContent = user_number + " " + user_name + " " + model + " " + time + " " + user_address;
             String md5Content = md5(setContent);
-            String newContent = user_number + "," + user_name + "," + model + "," + time + "," + user_address + ","
+            final String newContent = user_number + "," + user_name + "," + model + "," + time + "," + user_address + ","
                     + md5Content.substring(md5Content.length()-8);
             System.out.println(newContent);
-            Bitmap bitmap = QRCodeUtil.createQRCodeBitmap(newContent,640,640);
+            final Bitmap bitmap = QRCodeUtil.createQRCodeBitmap(newContent,640,640);
             imageView.setImageBitmap(bitmap);
+
+            imageView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    goBLue(newContent);
+                    return false;
+                }
+            });
     }
 
     private void setMenu(Toolbar toolbar){
@@ -201,7 +212,7 @@ public class CodeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 new AlertDialog.Builder(CodeActivity.this)
                         .setTitle("选择时间")
-                        .setItems(Items, new DialogInterface.OnClickListener() {
+                        .setItems(Items, new OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 TimeCheck = which;
@@ -233,21 +244,45 @@ public class CodeActivity extends AppCompatActivity {
                     }
                     String setContent = code_number + " " + code_name.getText().toString() + " " + "访客" + " " + getTime() + " " + "访客邀请";
                     String md5Content = md5(setContent);
-                    String newContent = code_number + "," + code_name.getText().toString() + "," + "访客" + "," + getTime() + "," + "访客邀请" + ","
+                    final String newContent = code_number + "," + code_name.getText().toString() + "," + "访客" + "," + getTime() + "," + "访客邀请" + ","
                             + md5Content.substring(md5Content.length()-8);
                     System.out.println(newContent);
-                    Bitmap bitmap = QRCodeUtil.createQRCodeBitmap(newContent,640,640);
+                    final Bitmap bitmap = QRCodeUtil.createQRCodeBitmap(newContent,640,640);
                     imageView_f.setImageBitmap(bitmap);
                     InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                     if (imm.isActive()){
                         imm.hideSoftInputFromWindow(v.getApplicationWindowToken(),0);
 
                     }
+
+                    imageView_f.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            goBLue(newContent);
+                            return false;
+                        }
+                    });
                 }
             }
         });
     }
 
+
+    //蓝牙打印
+    private void goBLue(final String content){
+        String item[] = {"打印二维码"};
+        new AlertDialog.Builder(CodeActivity.this)
+                .setTitle(null)
+                .setItems(item, new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(CodeActivity.this, PrintActivity.class);
+                        intent.putExtra("code_content",content);
+                        startActivity(intent);
+                    }
+                })
+                .create().show();
+    }
 
     //获取系统时间，并进行格式转换
     private String getTime(){
@@ -261,7 +296,7 @@ public class CodeActivity extends AppCompatActivity {
             return simpleDateFormat.format(nowDate2);
         }else if(TimeCheck == 3){
             Date nowDate3 = new Date(nowData.getTime());
-            SimpleDateFormat simpleDateFormat3 = new SimpleDateFormat("2099-MM-dd HH:mm:ss");
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat3 = new SimpleDateFormat("2099-MM-dd HH:mm:ss");
             return simpleDateFormat3.format(nowDate3);
         }else {
             return simpleDateFormat.format(nowData);

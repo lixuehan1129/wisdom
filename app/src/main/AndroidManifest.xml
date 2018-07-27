@@ -140,6 +140,12 @@
         <activity android:name=".FaceUtil.FaceTestActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             tools:ignore="InnerclassSeparator" />
+        <activity android:name=".BlueTooth.PrintActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            tools:ignore="InnerclassSeparator" />
+        <activity android:name=".BlueTooth.DeviceListActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            tools:ignore="InnerclassSeparator" />
 
         <activity
             android:name="com.tencent.bugly.beta.ui.BetaActivity"

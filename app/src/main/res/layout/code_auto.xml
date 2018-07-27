@@ -85,7 +85,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"/>
             <TextView
-                android:hint="请选择"
+                android:hint="请选择,默认当天"
                 android:id="@+id/code_auto_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
