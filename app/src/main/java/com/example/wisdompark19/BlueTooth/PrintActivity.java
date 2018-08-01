@@ -78,11 +78,11 @@ public class PrintActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        if (!mBluetoothAdapter.isEnabled()) {
-            //打开蓝牙
-            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-        }
+//        if (!mBluetoothAdapter.isEnabled()) {
+//            //打开蓝牙
+//            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+//            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+//        }
         if (mService == null) {
             mService = new BluetoothService(PrintActivity.this, mHandler);
         }
@@ -104,11 +104,13 @@ public class PrintActivity extends AppCompatActivity {
     public void onClick(View v){
         switch (v.getId()) {
             case R.id.print_img_btn:
-                sendMessage("二维码");
-                sendMessage("\n");
+//                mService.printCenter();
+//                sendMessage("\n");
                 sendMessage(bitmapPrint);
                 sendMessage(" \n");
+                sendMessage("二维码");
                 sendMessage(" \n");
+                mService.printReset();
                 break;
             case R.id.print_connect_btn:
                 openOptionsMenu();
@@ -130,7 +132,6 @@ public class PrintActivity extends AppCompatActivity {
             Toast.makeText(this, "蓝牙没有连接", Toast.LENGTH_SHORT).show();
             return;
         }
-
         // Check that there's actually something to send
         if (message.length() > 0) {
             // Get the message bytes and tell the BluetoothService to write
@@ -156,7 +157,6 @@ public class PrintActivity extends AppCompatActivity {
         byte[] start = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1B,
                 0x40, 0x1B, 0x33, 0x00 };
         mService.write(start);
-        mService.printCenter();
         byte[] draw2PxPoint = DealBitmap.draw2PxPoint(bitmap);
         mService.write(draw2PxPoint);
         // 发送结束指令
@@ -201,7 +201,7 @@ public class PrintActivity extends AppCompatActivity {
                             break;
                         case BluetoothService.STATE_LISTEN:
                         case BluetoothService.STATE_NONE:
-                            print_connect_btn.setText("无连接");
+                            print_connect_btn.setText("连接蓝牙");
                             break;
                     }
                     break;
@@ -238,7 +238,6 @@ public class PrintActivity extends AppCompatActivity {
 
     //返回注销事件
     private void back(Toolbar toolbar){
-
         //menu item点击事件监听
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -257,7 +256,6 @@ public class PrintActivity extends AppCompatActivity {
                 return false;
             }
         });
-
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -100,6 +100,7 @@ public class DeviceListActivity extends Activity {
         }
     }
 
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

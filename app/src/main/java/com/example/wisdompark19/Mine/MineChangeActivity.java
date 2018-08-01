@@ -249,7 +249,7 @@ public class MineChangeActivity extends AppCompatActivity implements View.OnClic
                     Looper.prepare();
                     Connection conn_update = JDBCTools.getConnection("shequ","Zz123456");
                         if(conn_update != null){
-                            int user_sort;
+                            int user_sort = 2;
                             Statement statement = conn_update.createStatement();
                             if(AREA_SELECT == 1){
                                 user_sort = 0; //管理员,创建了一个社区
@@ -337,6 +337,9 @@ public class MineChangeActivity extends AppCompatActivity implements View.OnClic
 
                             SharePreferences.remove(MineChangeActivity.this,AppConstants.USER_SEX);
                             SharePreferences.putString(MineChangeActivity.this,AppConstants.USER_SEX,user_sex_select);
+
+                            SharePreferences.remove(MineChangeActivity.this,AppConstants.USER_SORT);
+                            SharePreferences.putInt(MineChangeActivity.this,AppConstants.USER_SORT,user_sort);
 
                             Intent intent_broad = new Intent(AppConstants.BROAD_CON);
                             LocalBroadcastManager.getInstance(MineChangeActivity.this).sendBroadcast(intent_broad);

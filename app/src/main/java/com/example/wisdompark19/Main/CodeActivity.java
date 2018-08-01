@@ -1,16 +1,21 @@
 package com.example.wisdompark19.Main;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.provider.ContactsContract;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -30,10 +35,11 @@ import com.example.wisdompark19.AutoProject.AppConstants;
 import com.example.wisdompark19.AutoProject.DealBitmap;
 import com.example.wisdompark19.AutoProject.QRCodeUtil;
 import com.example.wisdompark19.AutoProject.SharePreferences;
-import com.example.wisdompark19.BlueTooth.PrintActivity;
+import com.example.wisdompark19.BlueTooth.BluetoothService;
+import com.example.wisdompark19.BlueTooth.DeviceListActivity;
 import com.example.wisdompark19.R;
-import com.example.wisdompark19.ViewHelper.DataBaseHelper;
 
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
@@ -48,6 +54,30 @@ import static android.content.DialogInterface.*;
  */
 
 public class CodeActivity extends AppCompatActivity {
+
+    public static final int MESSAGE_STATE_CHANGE = 1;
+    public static final int MESSAGE_READ = 2;
+    public static final int MESSAGE_WRITE = 3;
+    public static final int MESSAGE_DEVICE_NAME = 4;
+    public static final int MESSAGE_TOAST = 5;
+    // Key names received from the BluetoothService Handler
+    public static final String DEVICE_NAME = "device_name";
+    public static final String TOAST = "toast";
+
+    // Intent request codes
+    private static final int REQUEST_CONNECT_DEVICE = 1;
+    private static final int REQUEST_ENABLE_BT = 2;
+    // Name of the connected device
+    private String mConnectedDeviceName = null;
+    // Local Bluetooth adapter
+    private BluetoothAdapter mBluetoothAdapter = null;
+    // Member object for the services
+    public static BluetoothService mService = null;
+
+    private TextView codeBlue;
+
+
+
 
     private ImageView imageView;
     private ImageView imageView_f;
@@ -71,11 +101,14 @@ public class CodeActivity extends AppCompatActivity {
         setMenu(toolbar);
         findView();
         setView();
+        regiestBroast();
+        goBlueTooth();
     }
 
 
     private void findView(){
         imageView = (ImageView) findViewById(R.id.code_activity_iv);
+        codeBlue = (TextView) findViewById(R.id.code_blue);
         LinearLayout code_create = (LinearLayout) findViewById(R.id.code_create); //生成访客
         CircleImageView circleImageView = (CircleImageView) findViewById(R.id.code_picture);
         TextView name = (TextView) findViewById(R.id.code_name);
@@ -147,16 +180,6 @@ public class CodeActivity extends AppCompatActivity {
                     return false;
                 }
             });
-    }
-
-    private void setMenu(Toolbar toolbar){
-        //返回按钮监听
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
     }
 
     private void showNewPage(){
@@ -268,22 +291,6 @@ public class CodeActivity extends AppCompatActivity {
     }
 
 
-    //蓝牙打印
-    private void goBLue(final String content){
-        String item[] = {"打印二维码"};
-        new AlertDialog.Builder(CodeActivity.this)
-                .setTitle(null)
-                .setItems(item, new OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(CodeActivity.this, PrintActivity.class);
-                        intent.putExtra("code_content",content);
-                        startActivity(intent);
-                    }
-                })
-                .create().show();
-    }
-
     //获取系统时间，并进行格式转换
     private String getTime(){
         @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -328,6 +335,207 @@ public class CodeActivity extends AppCompatActivity {
         return "";
     }
 
+    //连接蓝牙
+    private void goBlueTooth(){
+        codeBlue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initBlue();
+            }
+        });
+    }
+
+    private void initBlue(){
+        BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        mBluetoothAdapter = bluetoothManager.getAdapter();
+        if (mBluetoothAdapter == null) {
+            Toast.makeText(this, "您的设备不支持蓝牙", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if(mBluetoothAdapter.isEnabled()) {
+           initView();
+        }else {
+            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+            initView();
+        }
+
+    }
+
+    private void initView(){
+
+        if (mService == null) {
+            mService = new BluetoothService(CodeActivity.this, mHandler);
+        }
+
+        String items[] = {"连接设备", "断开"};
+        final AlertDialog.Builder builder = new AlertDialog.Builder(CodeActivity.this);
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case 0 :{
+                        Intent serverIntent = new Intent(CodeActivity.this, DeviceListActivity.class);
+                        startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
+                        break;
+                    }
+                    case 1 :{
+                        mService.stop();
+                        break;
+                    }
+                    default :
+                        break;
+                }
+            }
+        });
+        builder.create().show();
+    }
+
+
+    //蓝牙打印
+    private void goBLue(final String content){
+        String item[] = {"打印二维码"};
+        new AlertDialog.Builder(CodeActivity.this)
+                .setTitle(null)
+                .setItems(item, new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(mService == null){
+                            Toast.makeText(CodeActivity.this, "蓝牙没有连接", Toast.LENGTH_SHORT).show();
+                            return;
+                        }else if (mService.getState() != BluetoothService.STATE_CONNECTED) {
+                            Toast.makeText(CodeActivity.this, "没有连接到设备", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+//                        Intent intent = new Intent(CodeActivity.this, PrintActivity.class);
+//                        intent.putExtra("code_content",content);
+//                        startActivity(intent);
+                        sendMessage(QRCodeUtil.createQRCodeBitmap(content,360,360));
+                        sendMessage(" \n");
+                        sendMessage(" \n");
+                    }
+                })
+                .create().show();
+    }
+
+    /**
+     * 打印
+     * @param message
+     */
+    private void sendMessage(String message) {
+        // Check that we're actually connected before trying anything
+        if (mService.getState() != BluetoothService.STATE_CONNECTED) {
+            Toast.makeText(this, "蓝牙没有连接", Toast.LENGTH_SHORT).show();
+            return;
+        }
+      //  mService.printCenter();
+        // Check that there's actually something to send
+        if (message.length() > 0) {
+            // Get the message bytes and tell the BluetoothService to write
+            byte[] send;
+            try {
+                send = message.getBytes("GB2312");
+            } catch (UnsupportedEncodingException e) {
+                send = message.getBytes();
+            }
+            mService.write(send);
+        }
+    }
+
+
+    private void sendMessage(Bitmap bitmap) {
+        // Check that we're actually connected before trying anything
+        if (mService.getState() != BluetoothService.STATE_CONNECTED) {
+            Toast.makeText(this, "蓝牙没有连接", Toast.LENGTH_SHORT).show();
+            return;
+        }
+       // mService.printCenter();
+        // 发送打印图片前导指令
+        byte[] start = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1B,
+                0x40, 0x1B, 0x33, 0x00 };
+        mService.write(start);
+        byte[] draw2PxPoint = DealBitmap.draw2PxPoint(bitmap);
+        mService.write(draw2PxPoint);
+        // 发送结束指令
+        byte[] end = { 0x1d, 0x4c, 0x1f, 0x00 };
+        mService.write(end);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_CONNECT_DEVICE:
+                if (resultCode == Activity.RESULT_OK) {
+                    String address = data.getExtras()
+                            .getString(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
+                    BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
+                    mService.connect(device);
+                }
+                break;
+            case REQUEST_ENABLE_BT:
+                if (resultCode == Activity.RESULT_OK) {
+                    Toast.makeText(this, "蓝牙已打开", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(this, "蓝牙没有打开", Toast.LENGTH_LONG).show();
+                    finish();
+                }
+        }
+    }
+
+    // The Handler that gets information back from the BluetoothService
+    @SuppressLint("HandlerLeak")
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MESSAGE_STATE_CHANGE:
+                    switch (msg.arg1) {
+                        case BluetoothService.STATE_CONNECTED:
+                            codeBlue.setText("已连接");
+                            Toast.makeText(CodeActivity.this,"长按二维码打印",Toast.LENGTH_LONG).show();
+                            break;
+                        case BluetoothService.STATE_CONNECTING:
+                            codeBlue.setText("正在连接...");
+                            break;
+                        case BluetoothService.STATE_LISTEN:
+                        case BluetoothService.STATE_NONE:
+                            codeBlue.setText("连接蓝牙");
+                            break;
+                    }
+                    break;
+                case MESSAGE_WRITE:
+                    //byte[] writeBuf = (byte[]) msg.obj;
+                    // construct a string from the buffer
+                    //String writeMessage = new String(writeBuf);
+                    break;
+                case MESSAGE_READ:
+                    //byte[] readBuf = (byte[]) msg.obj;
+                    // construct a string from the valid bytes in the buffer
+                    //String readMessage = new String(readBuf, 0, msg.arg1);
+                    break;
+                case MESSAGE_DEVICE_NAME:
+                    // save the connected device's name
+                    mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
+                    Toast.makeText(CodeActivity.this, "连接至"
+                            + mConnectedDeviceName, Toast.LENGTH_SHORT).show();
+                    break;
+                case MESSAGE_TOAST:
+                    Toast.makeText(getApplicationContext(), msg.getData().getString(TOAST),
+                            Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+    };
+
+    private void setMenu(Toolbar toolbar){
+        //返回按钮监听
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -337,4 +545,41 @@ public class CodeActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(stateChangeReceiver);
+        if (mService != null) {
+            mService.stop();
+        }
+    }
+
+    //监听蓝牙连接状态
+    private void regiestBroast() {
+        IntentFilter connectedFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+        registerReceiver(stateChangeReceiver, connectedFilter);
+    }
+
+    private BroadcastReceiver stateChangeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int action = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE,
+                    BluetoothAdapter.ERROR);
+            switch (action) {
+                case BluetoothAdapter.STATE_TURNING_OFF: {
+                    System.out.println("没有吗");
+                    if (mService != null) {
+                        System.out.println("没有吗");
+                        mService.stop();
+                    }
+                    break;
+                }
+                case BluetoothAdapter.STATE_ON: {
+                //    initView();
+                    break;
+                }
+            }
+        }
+    };
 }

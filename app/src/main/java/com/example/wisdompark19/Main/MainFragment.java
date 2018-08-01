@@ -42,6 +42,7 @@ import com.example.wisdompark19.ViewHelper.DataBaseHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -225,29 +226,46 @@ public class MainFragment extends BaseFragment {
 //                        startActivity(intent);
                     }break;
                     case 1:{
-                        Intent intent = new Intent(getActivity(),RepairActivity.class);
-                        intent.putExtra("put_data_repair","报修管理");
-                        startActivity(intent);
+                        if(SharePreferences.getInt(Objects.requireNonNull(getActivity()),AppConstants.USER_SORT) != 2){
+                            Intent intent = new Intent(getActivity(),RepairActivity.class);
+                            intent.putExtra("put_data_repair","报修管理");
+                            startActivity(intent);
+                        }else {
+                            Toast.makeText(getActivity(), "请先加入或创建一个社区\n\n可在  我的-详细资料  里修改", Toast.LENGTH_SHORT).show();
+                        }
+
                     }break;
                     case 2:{
-                        Intent intent = new Intent(getActivity(),ShopActivity.class);
-                        intent.putExtra("put_data_shop","电商平台");
-                        startActivity(intent);
+                        if(SharePreferences.getInt(Objects.requireNonNull(getActivity()),AppConstants.USER_SORT) != 2) {
+                            Intent intent = new Intent(getActivity(), ShopActivity.class);
+                            intent.putExtra("put_data_shop", "电商平台");
+                            startActivity(intent);
+                        }else {
+                            Toast.makeText(getActivity(), "请先加入或创建一个社区\n\n可在  我的-详细资料  里修改", Toast.LENGTH_SHORT).show();
+                        }
                     }break;
                     case 3:{
-                        Intent intent = new Intent(getActivity(),CodeActivity.class);
-                        intent.putExtra("put_data_code","通行证");
-                        startActivity(intent);
+                        if(SharePreferences.getInt(Objects.requireNonNull(getActivity()),AppConstants.USER_SORT) != 2) {
+                            Intent intent = new Intent(getActivity(), CodeActivity.class);
+                            intent.putExtra("put_data_code", "通行证");
+                            startActivity(intent);
+                        }else {
+                            Toast.makeText(getActivity(), "请先加入或创建一个社区\n\n可在  我的-详细资料  里修改", Toast.LENGTH_SHORT).show();
+                        }
                     }break;
                     case 4:{
-                        Intent intent = new Intent(getActivity(),MapActivity.class);
-                        intent.putExtra("put_data_weizhi","我的位置");
+                        Intent intent = new Intent(getActivity(), MapActivity.class);
+                        intent.putExtra("put_data_weizhi", "我的位置");
                         startActivity(intent);
                     }break;
                     case 5:{
+                    if(SharePreferences.getInt(Objects.requireNonNull(getActivity()),AppConstants.USER_SORT) != 2) {
                         Intent intent = new Intent(getActivity(),GuideActivity.class);
                         intent.putExtra("put_data_waishe","咨询中心");
                         startActivity(intent);
+                    }else {
+                        Toast.makeText(getActivity(), "请先加入或创建一个社区\n\n可在  我的-详细资料  里修改", Toast.LENGTH_SHORT).show();
+                    }
                     }break;
 //                    case 6:{
 //                        Toast toast=Toast.makeText(getActivity(), "进入通行证界面查看", Toast.LENGTH_SHORT);
