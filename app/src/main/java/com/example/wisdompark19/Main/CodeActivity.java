@@ -142,7 +142,7 @@ public class CodeActivity extends AppCompatActivity {
 
 
     private void setView(){
-        String sex = SharePreferences.getString(CodeActivity.this, AppConstants.USER_SEX);
+        final String sex = SharePreferences.getString(CodeActivity.this, AppConstants.USER_SEX);
         String user_phone = SharePreferences.getString(CodeActivity.this, AppConstants.USER_PHONE);
       //  String user_number = user_phone;
         String user_number = "2";
@@ -173,10 +173,11 @@ public class CodeActivity extends AppCompatActivity {
             final Bitmap bitmap = QRCodeUtil.createQRCodeBitmap(newContent,640,640);
             imageView.setImageBitmap(bitmap);
 
-            imageView.setOnLongClickListener(new View.OnLongClickListener() {
+        final String finalUser_name = user_name;
+        imageView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    goBLue(newContent);
+                    goBLue(finalUser_name,sex,"当天",QRCodeUtil.createQRCodeBitmap(newContent,240,240));
                     return false;
                 }
             });
@@ -262,7 +263,7 @@ public class CodeActivity extends AppCompatActivity {
                     String code_number = null;
                     if(code_sex_select.equals("男")){
                         code_number = "1";
-                    }else if(code_sex_select.equals("女")){
+                    }else{
                         code_number = "0";
                     }
                     String setContent = code_number + " " + code_name.getText().toString() + " " + "访客" + " " + getTime() + " " + "访客邀请";
@@ -278,10 +279,21 @@ public class CodeActivity extends AppCompatActivity {
 
                     }
 
+                    final String fang_time;
+                    if(TimeCheck == 1){
+                        fang_time = "一周";
+                    }else if(TimeCheck == 2){
+                        fang_time = "一个月";
+                    }else if(TimeCheck == 3){
+                        fang_time = "永久";
+                    }else {
+                        fang_time = "当天";
+                    }
+
                     imageView_f.setOnLongClickListener(new View.OnLongClickListener() {
                         @Override
                         public boolean onLongClick(View v) {
-                            goBLue(newContent);
+                            goBLue(code_name.getText().toString(),code_sex_select,fang_time,QRCodeUtil.createQRCodeBitmap(newContent,240,240));
                             return false;
                         }
                     });
@@ -393,7 +405,7 @@ public class CodeActivity extends AppCompatActivity {
 
 
     //蓝牙打印
-    private void goBLue(final String content){
+    private void goBLue(final String name, final String sex, final String time, final Bitmap bitmap){
         String item[] = {"打印二维码"};
         new AlertDialog.Builder(CodeActivity.this)
                 .setTitle(null)
@@ -410,7 +422,12 @@ public class CodeActivity extends AppCompatActivity {
 //                        Intent intent = new Intent(CodeActivity.this, PrintActivity.class);
 //                        intent.putExtra("code_content",content);
 //                        startActivity(intent);
-                        sendMessage(QRCodeUtil.createQRCodeBitmap(content,360,360));
+                        mService.printCenter();
+                        sendMessage(name + "\n\n");
+                        sendMessage(sex + "\n\n");
+                        sendMessage(time + "\n");
+                        sendMessage(bitmap);
+                        sendMessage(" \n");
                         sendMessage(" \n");
                         sendMessage(" \n");
                     }
@@ -428,7 +445,7 @@ public class CodeActivity extends AppCompatActivity {
             Toast.makeText(this, "蓝牙没有连接", Toast.LENGTH_SHORT).show();
             return;
         }
-      //  mService.printCenter();
+
         // Check that there's actually something to send
         if (message.length() > 0) {
             // Get the message bytes and tell the BluetoothService to write
@@ -449,12 +466,12 @@ public class CodeActivity extends AppCompatActivity {
             Toast.makeText(this, "蓝牙没有连接", Toast.LENGTH_SHORT).show();
             return;
         }
-       // mService.printCenter();
         // 发送打印图片前导指令
         byte[] start = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1B,
                 0x40, 0x1B, 0x33, 0x00 };
         mService.write(start);
-        byte[] draw2PxPoint = DealBitmap.draw2PxPoint(bitmap);
+        mService.printCenter();
+        byte[] draw2PxPoint = DealBitmap.draw2PxPoint240(DealBitmap.compressBitmap(bitmap));
         mService.write(draw2PxPoint);
         // 发送结束指令
         byte[] end = { 0x1d, 0x4c, 0x1f, 0x00 };

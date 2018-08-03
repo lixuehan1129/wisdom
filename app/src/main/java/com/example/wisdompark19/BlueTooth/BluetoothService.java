@@ -508,6 +508,7 @@ public class BluetoothService {
                 // Share the sent message back to the UI Activity
                 mHandler.obtainMessage(CodeActivity.MESSAGE_WRITE, -1, -1, buffer)
                         .sendToTarget();
+                mmOutStream.flush();
             } catch (IOException e) {
                 Log.e(TAG, "Exception during write", e);
             }
