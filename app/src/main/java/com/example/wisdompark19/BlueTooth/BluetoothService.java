@@ -51,8 +51,8 @@ public class BluetoothService {
             { 0x1b, 0x4d, 0x01 },// 压缩ASCII字体
             { 0x1d, 0x21, 0x00 },// 字体不放大
             { 0x1d, 0x21, 0x02 },// 宽高加倍
-            { 0x1d, 0x21, 0x11 },// 宽高加倍
-//            { 0x1d, 0x21, 0x11 },// 宽高加倍
+ //           { 0x1d, 0x21, 0x11 },// 宽高加倍
+            { 0x1b, 0x33, 0x09 },// 宽高加倍
             { 0x1b, 0x45, 0x00 },// 取消加粗模式
             { 0x1b, 0x45, 0x01 },// 选择加粗模式
             { 0x1b, 0x7b, 0x00 },// 取消倒置打印
@@ -65,7 +65,6 @@ public class BluetoothService {
             { 0x1b, 0x61, 0x30 },// 左对齐
             { 0x1b, 0x61, 0x31 },// 居中对齐
             { 0x1b, 0x61, 0x32 },// 右对齐
-//            { 0x1b, 0x69 },// 切纸
     };
 
 
@@ -91,6 +90,9 @@ public class BluetoothService {
                 break;
             case 2:
                 write(byteCommands[5]);
+                break;
+            case 3:
+                write(byteCommands[16]);
                 break;
             default:
                 write(byteCommands[3]);

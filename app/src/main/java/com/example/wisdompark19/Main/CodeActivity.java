@@ -423,8 +423,8 @@ public class CodeActivity extends AppCompatActivity {
 //                        intent.putExtra("code_content",content);
 //                        startActivity(intent);
                         mService.printCenter();
-                        sendMessage(name + "\n\n");
-                        sendMessage(sex + "\n\n");
+                        sendMessage(name + "\n");
+                        sendMessage(sex + "\n");
                         sendMessage(time + "\n");
                         sendMessage(bitmap);
                         sendMessage(" \n");
@@ -446,6 +446,8 @@ public class CodeActivity extends AppCompatActivity {
             return;
         }
 
+        mService.printSize(2);
+        mService.printCenter();
         // Check that there's actually something to send
         if (message.length() > 0) {
             // Get the message bytes and tell the BluetoothService to write

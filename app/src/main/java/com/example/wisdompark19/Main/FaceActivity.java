@@ -75,16 +75,9 @@ public class FaceActivity extends AppCompatActivity {
 
     // 拍照得到的照片文件
     private File mPictureFile;
-    // FaceRequest对象，集成了人脸识别的各种功能
-    //private FaceRequest mFaceRequest;
 
-    //采用身份识别接口进行在线人脸识别
- //   private IdentityVerifier mIdVerifier;
     private DataBaseHelper dataBaseHelper;
-    // 模型操作
-    private int mModelCmd;
-    // 删除模型
-    private final static int MODEL_DEL = 1;
+
 
     private ImageView face_image;
     private TextView face_add;
@@ -139,38 +132,15 @@ public class FaceActivity extends AppCompatActivity {
         mProDialog.setCancelable(true);
         mProDialog.setTitle("请稍后");
 
-//        mIdVerifier = IdentityVerifier.createVerifier(FaceActivity.this, new InitListener() {
-//            @Override
-//            public void onInit(int errorCode) {
-//                if (ErrorCode.SUCCESS == errorCode) {
-//                    showTip("引擎初始化成功");
-//                    ButtonClick();
-//                } else {
-//                    showTip("引擎初始化失败，错误码：" + errorCode);
-//                    //           showTip("出现错误！");
-//                }
-//            }
-//        });
         ButtonClick();
 
         mProDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
-                // cancel进度框时,取消正在进行的操作
-//                if (null != mIdVerifier) {
-//                    mIdVerifier.cancel();
-//                }
+
             }
         });
 
-//        Button face_test = (Button) findViewById(R.id.face_test);
-//        face_test.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(FaceActivity.this,FaceTestActivity.class);
-//                startActivity(intent);
-//            }
-//        });
     }
 
     //点击事件
@@ -189,9 +159,6 @@ public class FaceActivity extends AppCompatActivity {
         face_rem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 人脸模型删除
-//                mModelCmd = MODEL_DEL;
-//                executeModelCommand("delete");
                 takePhoto();
             }
         });
@@ -204,12 +171,6 @@ public class FaceActivity extends AppCompatActivity {
                         mProDialog.setMessage("注册中...");
                         mProDialog.show();
                         saveData();
-//                        if(face_sure == 0){
-////                            mModelCmd = MODEL_DEL;
-////                            executeModelCommand("delete");
-//                        }else if(face_sure == 1){
-//                            regeist();
-//                        }
                     }else {
                         showTip("请选择照片后注册");
                     }
@@ -217,35 +178,9 @@ public class FaceActivity extends AppCompatActivity {
             }
         });
 
-//        if( ErrorCode.SUCCESS != ret ){
-//            mProDialog.dismiss();
-//            showTip( "出现错误："+ret );
-//        }
     }
 
-//    private void regeist(){
-////        if (null != mImageData) {
-//            // 设置用户标识，格式为6-18个字符（由字母、数字、下划线组成，不得以数字开头，不能包含空格）。
-//            // 当不设置时，云端将使用用户设备的设备ID来标识终端用户。
-//            // 设置人脸注册参数
-//            // 清空参数
-//            mIdVerifier.setParameter(SpeechConstant.PARAMS, null);
-//            // 设置会话场景
-//            mIdVerifier.setParameter(SpeechConstant.MFV_SCENES, "ifr");
-//            // 设置会话类型
-//            mIdVerifier.setParameter(SpeechConstant.MFV_SST, "enroll");
-//            // 设置用户id
-//            mIdVerifier.setParameter(SpeechConstant.AUTH_ID, mAuthid);
-//            // 设置监听器，开始会话
-//            mIdVerifier.startWorking(mEnrollListener);
-//
-//            // 子业务执行参数，若无可以传空字符传
-//            StringBuffer params = new StringBuffer();
-//            // 向子业务写入数据，人脸数据可以一次写入
-//            mIdVerifier.writeData("ifr", params.toString(), mImageData, 0, mImageData.length);
-//            // 停止写入
-//            mIdVerifier.stopWrite("ifr");
-//    }
+
 
 
 
@@ -269,112 +204,6 @@ public class FaceActivity extends AppCompatActivity {
         startActivityForResult(mIntent, REQUEST_CAMERA_IMAGE);
     }
 
-
-
-//    //移除人脸模型
-//    private void executeModelCommand(String cmd) {
-//        // 设置人脸模型操作参数
-//        // 清空参数
-//        mIdVerifier.setParameter(SpeechConstant.PARAMS, null);
-//        // 设置会话场景
-//        mIdVerifier.setParameter(SpeechConstant.MFV_SCENES, "ifr");
-//        // 用户id
-//        mIdVerifier.setParameter(SpeechConstant.AUTH_ID, mAuthid);
-//
-//        // 设置模型参数，若无可以传空字符传
-//        StringBuffer params = new StringBuffer();
-//        // 执行模型操作
-//        mIdVerifier.execute("ifr", cmd, params.toString(), mModelListener);
-//    }
-
-
-    /**
-     * 人脸注册监听器
-     */
-    private IdentityListener mEnrollListener = new IdentityListener() {
-
-        @Override
-        public void onResult(IdentityResult result, boolean islast) {
-            Log.d(TAG, result.getResultString());
-
-            try {
-                JSONObject object = new JSONObject(result.getResultString());
-                int ret = object.getInt("ret");
-                if (ErrorCode.SUCCESS == ret) {
-                    saveData();
-                  //  FaceGroupManager.joinGroup(FaceActivity.this,"4124828422",mAuthid);
-                    showTip("注册成功");
-                }else {
-                    showTip(new SpeechError(ret).getPlainDescription(true));
-                 //   showTip("照片不合适，请重新拍照");
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        public void onEvent(int eventType, int arg1, int arg2, Bundle obj) {
-        }
-
-        @Override
-        public void onError(SpeechError error) {
-            if (null != mProDialog) {
-                mProDialog.dismiss();
-            }
-
-            showTip(error.getPlainDescription(true));
-        }
-
-    };
-
-
-    /**
-     * 人脸模型操作监听器,移除
-     */
-    private IdentityListener mModelListener = new IdentityListener() {
-
-        @Override
-        public void onResult(IdentityResult result, boolean islast) {
-            Log.d(TAG, result.getResultString());
-
-            JSONObject jsonResult = null;
-            int ret = ErrorCode.SUCCESS;
-            try {
-                jsonResult = new JSONObject(result.getResultString());
-                ret = jsonResult.getInt("ret");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            // 根据操作类型判断结果类型
-            switch (mModelCmd) {
-                case MODEL_DEL:
-                    if (ErrorCode.SUCCESS == ret) {
-                        showTip("删除成功");
-                        //regeist();
-                     //   showTip("请重新提交信息");
-                     //   takePhoto();
-                    } else {
-                        showTip("删除失败");
-                        takePhoto();
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        @Override
-        public void onEvent(int eventType, int arg1, int arg2, Bundle obj) {
-        }
-
-        @Override
-        public void onError(SpeechError error) {
-            // 弹出错误信息
-            showTip(error.getPlainDescription(true));
-        }
-
-    };
 
     private void saveData(){
         new Thread(){
@@ -464,6 +293,7 @@ public class FaceActivity extends AppCompatActivity {
         //删除重复数据
         String delete = "delete from face where face_phone in (select face_phone from face group by face_phone having count(face_phone) > 1)";
         sqLiteDatabase.execSQL(delete);
+
         if(!mAuthid.isEmpty()){
             @SuppressLint("Recycle") Cursor cursor = sqLiteDatabase.query("face",new String[]{"face_picture"},"face_phone = ?",
                     new String[]{mAuthid},null,null,null,"1");
