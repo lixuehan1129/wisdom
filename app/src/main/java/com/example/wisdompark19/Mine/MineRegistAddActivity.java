@@ -168,7 +168,7 @@ public class MineRegistAddActivity extends AppCompatActivity implements View.OnC
             public void run(){
                 try {
                     Looper.prepare();
-                    Connection conn = JDBCTools.getConnection("shequ","Zz123456");
+                    Connection conn = JDBCTools.getConnection();
                     if (conn != null) {
                         Statement statement_community = conn.createStatement();
                         String community_sql = "select * from community";
@@ -260,7 +260,7 @@ public class MineRegistAddActivity extends AppCompatActivity implements View.OnC
             public void run(){
                 try {
                     Looper.prepare();
-                    Connection conn_update = JDBCTools.getConnection("shequ","Zz123456");
+                    Connection conn_update = JDBCTools.getConnection();
                     if (conn_update!= null) {
                         if(user_phone != null){
                             Statement statement = conn_update.createStatement();

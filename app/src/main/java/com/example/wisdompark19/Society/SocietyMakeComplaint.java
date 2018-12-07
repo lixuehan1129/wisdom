@@ -213,7 +213,7 @@ public class SocietyMakeComplaint extends BaseFragment {
                     society_com_image = new ArrayList<>();
                     society_com_content = new ArrayList<>();
                     Looper.prepare();
-                    Connection conn = JDBCTools.getConnection("shequ","Zz123456");
+                    Connection conn = JDBCTools.getConnection();
                     if (conn != null) { //判断 如果返回不为空则说明链接成功 如果为null的话则连接失败 请检查你的 mysql服务器地址是否可用 以及数据库名是否正确 并且 用户名跟密码是否正确
                         Log.d("调试", "连接成功，吐槽界面");
                         Statement stmt = conn.createStatement(); //根据返回的Connection对象创建 Statement对象

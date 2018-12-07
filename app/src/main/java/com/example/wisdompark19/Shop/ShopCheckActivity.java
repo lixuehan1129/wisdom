@@ -94,7 +94,7 @@ public class ShopCheckActivity extends AppCompatActivity {
         new Thread(){
             public void run(){
                 try { Looper.prepare();
-                    Connection conn = JDBCTools.getConnection("shequ","Zz123456");
+                    Connection conn = JDBCTools.getConnection();
                     if (conn != null) {
                         Log.d("调试", "连接成功,订单查询");
                         Statement stmt = conn.createStatement();
@@ -233,7 +233,7 @@ public class ShopCheckActivity extends AppCompatActivity {
             public void run(){
                 try{
                     Looper.prepare();//用于toast
-                    Connection conn_update = JDBCTools.getConnection("shequ","Zz123456");
+                    Connection conn_update = JDBCTools.getConnection();
                     if(conn_update != null){
                         Log.d("调试", "连接成功，修改订单");
                         Statement stmt = conn_update.createStatement();

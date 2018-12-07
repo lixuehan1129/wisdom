@@ -197,7 +197,7 @@ public class GuideActivity extends AppCompatActivity {
             public void run(){
                 try{
                     Looper.prepare();
-                    Connection conn = JDBCTools.getConnection("shequ","Zz123456");
+                    Connection conn = JDBCTools.getConnection();
                     if (conn != null) {
                         Log.d("调试", "连接成功,指南");
                         Statement stmt = conn.createStatement();

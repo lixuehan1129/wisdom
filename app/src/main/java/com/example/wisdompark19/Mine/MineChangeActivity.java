@@ -247,7 +247,7 @@ public class MineChangeActivity extends AppCompatActivity implements View.OnClic
             public void run(){
                 try {
                     Looper.prepare();
-                    Connection conn_update = JDBCTools.getConnection("shequ","Zz123456");
+                    Connection conn_update = JDBCTools.getConnection();
                         if(conn_update != null){
                             int user_sort = 2;
                             Statement statement = conn_update.createStatement();
@@ -418,7 +418,7 @@ public class MineChangeActivity extends AppCompatActivity implements View.OnClic
             public void run(){
                 try {
                     Looper.prepare();
-                    Connection conn = JDBCTools.getConnection("shequ","Zz123456");
+                    Connection conn = JDBCTools.getConnection();
                     if (conn != null) {
                         Statement statement_community = conn.createStatement();
                         String community_sql = "select * from community";

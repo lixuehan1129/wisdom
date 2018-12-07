@@ -266,7 +266,7 @@ public class FaceTestActivity extends AppCompatActivity {
             public void run(){
                 try {
                     Looper.prepare();
-                    Connection conn = JDBCTools.getConnection("shequ", "Zz123456");
+                    Connection conn = JDBCTools.getConnection();
                     if (conn != null) { //判断
                         Log.d("调试", "连接成功");
                         Statement stmt = conn.createStatement(); //根据返回的Connection对象创建 Statement对象

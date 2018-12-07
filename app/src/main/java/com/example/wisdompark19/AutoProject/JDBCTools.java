@@ -14,7 +14,9 @@ import java.sql.DriverManager;
 
 public class JDBCTools {
     //数据库连接
-    public static Connection getConnection(String user, String pass) {
+    public static Connection getConnection() {
+        String user = "shequ";
+        String pass = "daydayup";
         Connection conn = null;//声明连接对象
         String driver = "com.mysql.jdbc.Driver";// 驱动程序类名
         String url = "jdbc:mysql://60.205.140.219:3306/shequ?" // 数据库URL
